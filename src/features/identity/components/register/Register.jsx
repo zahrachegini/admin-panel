@@ -51,76 +51,70 @@ const Register = () => {
           alt="logo"
           style={{ height: "80px", marginBottom: "15px" }}
         />
-        <h1 className="h2">پلتفرم آموزش آنلاین</h1>
-        <p className="lead">جهت ورود لازم است ثبت نام کنید.</p>
+        <h1 className="h2">{t("register.title")}</h1>
+        <p className="lead">{t("register.introMessage")}</p>
         <p className="lead">
-          قبلا ثبت نام کرده اید؟
-          <Link to="/login" className="me-2">
-            وارد شوید
+          {t("register.alreadyRegistered")}
+          <Link to="/login" className="mx-2">
+            {t("register.signin")}
           </Link>
         </p>
       </div>
       <div className="card">
         <div className="card-body">
           <div className="m-sm-4">
-            <form action="" onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-3">
-                <label htmlFor="" className="form-label">
-                  موبایل
-                </label>
+                <label className="form-label">{t("register.mobile")}</label>
                 <input
                   {...register("mobile", {
-                    required: "موبایل الزامی است",
+                    required: true,
                     minLength: 11,
                     maxLength: 11,
                   })}
-                  type="text"
                   className={`form-control form-control-lg ${
                     errors.mobile && "is-invalid"
                   }`}
                 />
                 {errors.mobile && errors.mobile.type === "required" && (
                   <p className="text-danger small fw-bolder mt-1">
-                    {errors.mobile?.message}
+                    {t("register.validation.mobileRequired")}
                   </p>
                 )}
                 {errors.mobile &&
                   (errors.mobile.type === "minLength" ||
                     errors.mobile.type === "maxLength") && (
                     <p className="text-danger small fw-bolder mt-1">
-                      موبایل باید 11 رقم باشد
+                      {t("register.validation.mobileLength")}
                     </p>
                   )}
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
-                  رمز عبور
+                  {t("register.password")}
                 </label>
                 <input
-                  {...register("password", {
-                    required: "رمز عبور الزامی است",
-                  })}
-                  type="password"
+                  {...register("password", { required: true })}
                   className={`form-control form-control-lg ${
                     errors.password && "is-invalid"
                   }`}
                 />
                 {errors.password && errors.password.type === "required" && (
                   <p className="text-danger small fw-bolder mt-1">
-                    {errors.password?.message}
+                    {t("register.validation.passwordRequired")}
                   </p>
                 )}
               </div>
               <div className="mb-3">
                 <label htmlFor="" className="form-label">
-                  تکرار رمز عبور
+                  {t("register.repeatPassword")}
                 </label>
                 <input
                   {...register("confirmPassword", {
-                    required: "تکرار رمز عبور الزامی است",
+                    required: true,
                     validate: (value) => {
                       if (watch("password") !== value)
-                        return "عدم تطابق با رمز وارد شده";
+                        return t("register.validation.notMatching");
                     },
                   })}
                   type="password"
@@ -131,7 +125,7 @@ const Register = () => {
                 {errors.confirmPassword &&
                   errors.confirmPassword.type === "required" && (
                     <p className="text-danger small fw-bolder mt-1">
-                      {errors.confirmPassword?.message}
+                      {t("register.validation.repeatPasswordRequired")}
                     </p>
                   )}
                 {errors.confirmPassword &&
@@ -147,20 +141,22 @@ const Register = () => {
                   disabled={isSubmitting}
                   className="btn btn-lg btn-primary"
                 >
-                  {t("register.register")}
+                  {isSubmitting ? t("register.saving") : t("register.register")}
                   {/* {isSubmitting ? "در حال انجام عملیات" : "ثبت نام کنید"} */}
                 </button>
               </div>
-              {isSuccessOperation && (
-                <div className="alert alert-success test-success p-2 mt-3">
-                  عملیات با موفقیت انجام شد. به صفحه ورود منتقل می شوید.
-                </div>
-              )}
               {routeErrors && (
                 <div className="alert alert-danger text-danger p-2 mt-3">
                   {routeErrors.response?.data.map((error) => (
-                    <p className="mb-0">{error.description}</p>
+                    <p className="mb-0">
+                      {t(`register.validation.${error.code}`)}
+                    </p>
                   ))}
+                </div>
+              )}
+              {isSuccessOperation && (
+                <div className="alert alert-success text-success p-2 mt-3">
+                  {t("register.successOperation")}
                 </div>
               )}
             </form>
