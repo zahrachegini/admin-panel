@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import logo from "@assets/images/logo.png";
 import { useForm } from "react-hook-form";
-import { httpService } from "../../../../core/http-service";
+import { httpService } from "@core/http-service";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 

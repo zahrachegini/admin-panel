@@ -1,21 +1,33 @@
-import { Link, useNavigation } from "react-router-dom";
+import {
+  Link,
+  redirect,
+  useNavigation,
+  useRouteError,
+  useSubmit,
+} from "react-router-dom";
 import logo from "@assets/images/logo.png";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
+import { httpService } from "@core/http-service";
 
 const Login = () => {
+  const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = () => {};
-
-  const { t } = useTranslation();
+  const submitForm = useSubmit();
+  const onSubmit = (data) => {
+    submitForm(data, { method: "post" });
+  };
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state !== "idle";
+
+  const routeErrors = useRouteError();
 
   return (
     <>
@@ -87,6 +99,15 @@ const Login = () => {
                   {isSubmitting ? t("login.signingin") : t("login.signin")}
                 </button>
               </div>
+              {routeErrors && (
+                <div className="alert alert-danger text-danger p-2 mt-3">
+                  {routeErrors.response?.data.map((error) => (
+                    <p className="mb-0">
+                      {t(`login.validation.${error.code}`)}
+                    </p>
+                  ))}
+                </div>
+              )}
             </form>
           </div>
         </div>
@@ -94,5 +115,15 @@ const Login = () => {
     </>
   );
 };
+
+export async function loginAction({ request }) {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+  const response = await httpService.post("/Users/login", data);
+  if (response.status === 200) {
+    localStorage.setItem("token", response?.data.token);
+    return redirect("/");
+  }
+}
 
 export default Login;
