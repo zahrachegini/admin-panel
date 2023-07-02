@@ -7,7 +7,7 @@ const TopNav = () => {
   return (
     <nav className="navbar navbar-expand navbar-light navbar-bg">
       <a className="sidebar-toggle" onClick={toggleSidebar}>
-        <i className="hamburger align-self center"></i>
+        <i className="hamburger align-self-center"></i>
       </a>
       <div className="d-flex align-items-center ms-auto me-3 gap-3">
         <ChangeLanguage />
