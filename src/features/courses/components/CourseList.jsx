@@ -1,15 +1,11 @@
-import { useLoaderData } from "react-router-dom";
 import Course from "./Course";
 
-const CourseList = () => {
-  const loadedCourses = useLoaderData();
-
+const CourseList = ({ courses }) => {
   return (
     <>
       <div className="row">
-        {loadedCourses.map((course) => (
+        {courses.map((course) => (
           <div className="col-12 col-md-6 col-lg-3" key={course.id}>
-            {console.log(course)}
             <Course {...course} />
           </div>
         ))}
